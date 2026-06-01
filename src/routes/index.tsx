@@ -1,29 +1,34 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { Hero } from "@/components/home/Hero";
+import { Marquee } from "@/components/layout/Marquee";
+import { CategoryGrid } from "@/components/home/CategoryGrid";
+import { SneakerScroll } from "@/components/home/SneakerScroll";
+import { FeaturedDrops } from "@/components/home/FeaturedDrops";
+import { LifestyleBanner } from "@/components/home/LifestyleBanner";
+import { LimitedDrops } from "@/components/home/LimitedDrops";
+import { Newsletter } from "@/components/home/Newsletter";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Your App" },
-      { name: "description", content: "Replace this with a one-sentence description of your app." },
-      { property: "og:title", content: "Your App" },
-      { property: "og:description", content: "Replace this with a one-sentence description of your app." },
+      { title: "One8 Commune — Own The Game" },
+      { name: "description", content: "Athletic luxury streetwear, sneakers, watches and gear. Season 04 is live." },
     ],
   }),
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
 function Index() {
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
+    <>
+      <Hero />
+      <Marquee items={["NEW SEASON", "LIMITED DROP", "ATHLETIC LUXURY", "MADE FOR THE GAME", "SHIPS IN 48H"]} />
+      <CategoryGrid />
+      <SneakerScroll />
+      <FeaturedDrops />
+      <LifestyleBanner />
+      <LimitedDrops />
+      <Newsletter />
+    </>
   );
 }

@@ -13,6 +13,7 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Header } from "../components/layout/Header";
 import { Footer } from "../components/layout/Footer";
+import { CursorGlow } from "../components/CursorGlow";
 
 function NotFoundComponent() {
   return (
@@ -86,7 +87,15 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/f6f8433b-8521-432f-a6ea-7618bc35ce78/id-preview-0063807b--cc94e322-64b4-4621-97e6-25cb743c9580.lovable.app-1780330644154.png" },
       { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/f6f8433b-8521-432f-a6ea-7618bc35ce78/id-preview-0063807b--cc94e322-64b4-4621-97e6-25cb743c9580.lovable.app-1780330644154.png" },
     ],
-    links: [{ rel: "stylesheet", href: appCss }],
+    links: [
+      { rel: "stylesheet", href: appCss },
+      { rel: "preconnect", href: "https://fonts.googleapis.com" },
+      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap",
+      },
+    ],
   }),
   shellComponent: RootShell,
   component: RootComponent,
@@ -113,9 +122,11 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="flex min-h-screen flex-col bg-background">
+      <div className="relative flex min-h-screen flex-col bg-background">
+        <div className="noise-layer" aria-hidden />
+        <CursorGlow />
         <Header />
-        <main className="flex-1">
+        <main className="relative z-[3] flex-1">
           <Outlet />
         </main>
         <Footer />

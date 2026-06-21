@@ -4,8 +4,10 @@ import { Marquee } from "@/components/layout/Marquee";
 import { CategoryGrid } from "@/components/home/CategoryGrid";
 import { SneakerScroll } from "@/components/home/SneakerScroll";
 import { FeaturedDrops } from "@/components/home/FeaturedDrops";
+import { StorySection } from "@/components/home/StorySection";
 import { LifestyleBanner } from "@/components/home/LifestyleBanner";
 import { LimitedDrops } from "@/components/home/LimitedDrops";
+import { Testimonials } from "@/components/home/Testimonials";
 import { Newsletter } from "@/components/home/Newsletter";
 
 export const Route = createFileRoute("/")({
@@ -22,12 +24,14 @@ function Index() {
   return (
     <>
       <Hero />
-      <Marquee items={["NEW SEASON", "LIMITED DROP", "ATHLETIC LUXURY", "MADE FOR THE GAME", "SHIPS IN 48H"]} />
+      <Marquee items={["ATHLETIC LUXURY", "MADE FOR THE GAME", "SHIPS IN 48H", "PREMIUM QUALITY", "NEW DROP"]} />
       <CategoryGrid />
       <SneakerScroll />
       <FeaturedDrops />
+      <StorySection />
       <LifestyleBanner />
       <LimitedDrops />
+      <Testimonials />
       <Newsletter />
     </>
   );

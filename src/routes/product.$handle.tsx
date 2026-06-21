@@ -2,6 +2,7 @@ import { createFileRoute, notFound, Link } from "@tanstack/react-router";
 import { ArrowRight, Shield, Truck, Undo2 } from "lucide-react";
 import { getProduct, formatPrice, products } from "@/lib/catalog";
 import { ProductCard } from "@/components/ProductCard";
+import { Product360 } from "@/components/Product360";
 
 export const Route = createFileRoute("/product/$handle")({
   loader: ({ params }) => {
@@ -32,13 +33,16 @@ function ProductPage() {
       </nav>
 
       <div className="grid gap-10 lg:grid-cols-[1.2fr_1fr] lg:gap-16">
-        <div className="overflow-hidden rounded-lg border border-white/10 bg-card">
-          <div className="relative aspect-[4/5]">
-            <img src={product.image} alt={product.title} className="h-full w-full object-cover" />
-            {product.badge && (
-              <span className="absolute left-5 top-5 rounded-full bg-primary px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-primary-foreground">{product.badge}</span>
-            )}
-          </div>
+        <div>
+          <Product360
+            frames={product.frames}
+            image={product.image}
+            alt={product.title}
+            badge={product.badge}
+          />
+          <p className="mt-3 text-center text-[10px] uppercase tracking-[0.28em] text-muted-foreground">
+            Interactive 360° view · drag to rotate
+          </p>
         </div>
 
         <div>

@@ -2,6 +2,9 @@ import { Link } from "@tanstack/react-router";
 import { Menu, Search, ShoppingBag, User, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useCart } from "@/hooks/useCart";
+import { CartDrawer } from "./CartDrawer";
+import { products } from "@/lib/catalog";
 
 const nav = [
   { to: "/shop", label: "Shop" },
@@ -15,7 +18,11 @@ const nav = [
 export function Header() {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const [scrolled, setScrolled] = useState(false);
+
+  const { cart, toggleCart } = useCart();
+  const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -23,6 +30,17 @@ export function Header() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  const filteredProducts = searchQuery
+    ? products.filter(
+        (p) =>
+          p.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          p.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          p.description.toLowerCase().includes(searchQuery.toLowerCase())
+      ).slice(0, 5)
+    : [];
+
+  const defaultSuggestions = products.slice(0, 4);
 
   return (
     <>
@@ -63,19 +81,25 @@ export function Header() {
             <button
               aria-label="Search"
               onClick={() => setSearch(true)}
-              className="text-foreground/70 transition hover:text-primary"
+              className="text-foreground/70 transition hover:text-primary cursor-pointer"
             >
               <Search className="h-5 w-5" />
             </button>
-            <button aria-label="Account" className="hidden text-foreground/70 transition hover:text-primary sm:block">
+            <button aria-label="Account" className="hidden text-foreground/70 transition hover:text-primary sm:block cursor-pointer">
               <User className="h-5 w-5" />
             </button>
-            <Link to="/shop" aria-label="Bag" className="relative text-foreground transition hover:text-primary">
+            <button
+              onClick={() => toggleCart(true)}
+              aria-label="Bag"
+              className="relative text-foreground transition hover:text-primary cursor-pointer bg-transparent border-none p-0"
+            >
               <ShoppingBag className="h-5 w-5" />
-              <span className="absolute -right-2 -top-2 grid h-4 w-4 place-items-center rounded-full bg-primary text-[9px] font-bold shadow-[0_0_12px_var(--primary)]">
-                0
-              </span>
-            </Link>
+              {totalItems > 0 && (
+                <span className="absolute -right-2 -top-2 grid h-4 w-4 place-items-center rounded-full bg-primary text-[9px] font-bold shadow-[0_0_12px_var(--primary)] text-white">
+                  {totalItems}
+                </span>
+              )}
+            </button>
           </div>
         </div>
 
@@ -105,6 +129,9 @@ export function Header() {
       </header>
       <div className="h-16 lg:h-20" aria-hidden />
 
+      {/* Cart drawer */}
+      <CartDrawer />
+
       {/* Search modal */}
       <AnimatePresence>
         {search && (
@@ -113,7 +140,10 @@ export function Header() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-[60] bg-background/80 backdrop-blur-2xl"
-            onClick={() => setSearch(false)}
+            onClick={() => {
+              setSearch(false);
+              setSearchQuery("");
+            }}
           >
             <motion.div
               initial={{ y: -40, opacity: 0 }}
@@ -127,25 +157,72 @@ export function Header() {
                 <Search className="h-5 w-5 text-foreground/60" />
                 <input
                   autoFocus
-                  placeholder="Search sneakers, collections, drops…"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search sneakers, apparel, accessory..."
                   className="w-full bg-transparent text-base text-foreground placeholder:text-muted-foreground focus:outline-none"
                 />
-                <button onClick={() => setSearch(false)} className="text-xs uppercase tracking-[0.22em] text-foreground/60">
+                <button
+                  onClick={() => {
+                    setSearch(false);
+                    setSearchQuery("");
+                  }}
+                  className="text-xs uppercase tracking-[0.22em] text-foreground/60 cursor-pointer"
+                >
                   Esc
                 </button>
               </div>
-              <div className="mt-6 grid gap-2">
-                {["Crimson Court", "Shadow Runner 01", "Black Capsule", "Iron Tee"].map((s) => (
-                  <Link
-                    key={s}
-                    to="/shop"
-                    onClick={() => setSearch(false)}
-                    className="glass-card flex items-center justify-between px-5 py-4 transition hover:border-primary/50"
-                  >
-                    <span className="text-sm">{s}</span>
-                    <span className="text-[10px] uppercase tracking-[0.22em] text-foreground/50">Suggested</span>
-                  </Link>
-                ))}
+
+              <div className="mt-6 grid gap-2 overflow-y-auto max-h-[50vh] scrollbar-thin">
+                {searchQuery === "" ? (
+                  <>
+                    <span className="text-[10px] uppercase tracking-widest text-muted-foreground px-2">Suggestions</span>
+                    {defaultSuggestions.map((p) => (
+                      <Link
+                        key={p.handle}
+                        to="/product/$handle"
+                        params={{ handle: p.handle }}
+                        onClick={() => {
+                          setSearch(false);
+                          setSearchQuery("");
+                        }}
+                        className="glass-card flex items-center justify-between px-5 py-3.5 transition hover:border-primary/50 cursor-pointer"
+                      >
+                        <div className="flex items-center gap-3">
+                          <img src={p.image} className="w-8 h-8 rounded object-cover" />
+                          <span className="text-sm">{p.title}</span>
+                        </div>
+                        <span className="text-[10px] uppercase tracking-[0.22em] text-foreground/50">Suggested</span>
+                      </Link>
+                    ))}
+                  </>
+                ) : filteredProducts.length > 0 ? (
+                  <>
+                    <span className="text-[10px] uppercase tracking-widest text-muted-foreground px-2">Products Found</span>
+                    {filteredProducts.map((p) => (
+                      <Link
+                        key={p.handle}
+                        to="/product/$handle"
+                        params={{ handle: p.handle }}
+                        onClick={() => {
+                          setSearch(false);
+                          setSearchQuery("");
+                        }}
+                        className="glass-card flex items-center justify-between px-5 py-3.5 transition hover:border-primary/50 cursor-pointer"
+                      >
+                        <div className="flex items-center gap-3">
+                          <img src={p.image} className="w-8 h-8 rounded object-cover" />
+                          <span className="text-sm">{p.title}</span>
+                        </div>
+                        <span className="text-xs font-semibold text-primary">{p.category}</span>
+                      </Link>
+                    ))}
+                  </>
+                ) : (
+                  <div className="glass-card text-center py-6 text-sm text-muted-foreground">
+                    No results found for "{searchQuery}"
+                  </div>
+                )}
               </div>
             </motion.div>
           </motion.div>

@@ -13,6 +13,7 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Header } from "../components/layout/Header";
 import { Footer } from "../components/layout/Footer";
+import { CursorGlow } from "../components/CursorGlow";
 
 function NotFoundComponent() {
   return (

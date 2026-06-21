@@ -17,6 +17,8 @@ export type Product = {
   description: string;
   image: string;
   badge?: string;
+  /** Ordered frame URLs for true 360° spin. Optional. */
+  frames?: string[];
 };
 
 const img = (q: string, w = 1200, h = 1500) =>

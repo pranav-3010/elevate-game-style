@@ -2,6 +2,7 @@ import { createFileRoute, notFound, Link } from "@tanstack/react-router";
 import { ArrowRight, Shield, Truck, Undo2 } from "lucide-react";
 import { getProduct, formatPrice, products } from "@/lib/catalog";
 import { ProductCard } from "@/components/ProductCard";
+import { Product360 } from "@/components/Product360";
 
 export const Route = createFileRoute("/product/$handle")({
   loader: ({ params }) => {

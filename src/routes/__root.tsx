@@ -122,9 +122,11 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="flex min-h-screen flex-col bg-background">
+      <div className="relative flex min-h-screen flex-col bg-background">
+        <div className="noise-layer" aria-hidden />
+        <CursorGlow />
         <Header />
-        <main className="flex-1">
+        <main className="relative z-[3] flex-1">
           <Outlet />
         </main>
         <Footer />

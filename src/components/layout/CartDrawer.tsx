@@ -26,8 +26,8 @@ export function CartDrawer() {
   return (
     <Sheet open={isOpen} onOpenChange={(open) => toggleCart(open)}>
       <SheetContent className="glass border-l border-white/10 w-full sm:max-w-md flex flex-col p-0">
-        <SheetHeader className="px-4 py-4 sm:px-6 sm:py-5 border-b border-white/5">
-          <SheetTitle className="flex items-center gap-3 text-base sm:text-lg font-display uppercase tracking-widest text-foreground">
+        <SheetHeader className="px-6 py-5 border-b border-white/5">
+          <SheetTitle className="flex items-center gap-3 text-lg font-display uppercase tracking-widest text-foreground">
             <ShoppingBag className="h-5 w-5 text-primary" />
             <span>Shopping Bag ({totalItems})</span>
           </SheetTitle>
@@ -51,7 +51,7 @@ export function CartDrawer() {
           </div>
         ) : (
           <>
-            <ScrollArea className="flex-1 px-4 py-4 sm:px-6">
+            <ScrollArea className="flex-1 px-6 py-4">
               <div className="grid gap-6">
                 {cart.map((item) => (
                   <div
@@ -116,7 +116,7 @@ export function CartDrawer() {
               </div>
             </ScrollArea>
 
-            <div className="border-t border-white/5 bg-black/40 backdrop-blur-md px-4 py-5 sm:px-6 sm:py-6 space-y-4">
+            <div className="border-t border-white/5 bg-black/40 backdrop-blur-md px-6 py-6 space-y-4">
               {/* Shipping progress bar */}
               <div className="space-y-1.5">
                 <div className="flex justify-between text-xs">

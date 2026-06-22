@@ -34,6 +34,7 @@ export const categories: Category[] = [
   { slug: "socks",      name: "Socks",          tagline: "Performance basics",   image: img("photo-1586350977771-b3b0abd50c82") },
   { slug: "gym",        name: "Gym Wear",       tagline: "Engineered for sweat", image: img("photo-1517836357463-d25dfeac3438") },
   { slug: "gadgets",    name: "Smart Gadgets",  tagline: "Quietly powerful",     image: img("photo-1505740420928-5e560c06d30e") },
+  { slug: "kids",       name: "Kids",           tagline: "Next-gen athletes",    image: img("photo-1503944583220-79d8926ad5e2") },
 ];
 
 export const products: Product[] = [
@@ -49,6 +50,9 @@ export const products: Product[] = [
   { handle: "stride-shorts",     title: "Stride Shorts 7\"",   category: "gym",     price: 2799,  currency: "INR", description: "Four-way stretch with bonded seams and concealed phone pocket.", image: img("photo-1517836357463-d25dfeac3438") },
   { handle: "pulse-buds",        title: "Pulse Buds Pro",    category: "gadgets",  price: 11999, currency: "INR", description: "Active noise cancelling earbuds with sport hooks and IPX5 sweatproofing.", image: img("photo-1505740420928-5e560c06d30e") },
   { handle: "circuit-band",      title: "Circuit Smart Band",category: "gadgets",  price: 7990,  currency: "INR", description: "OLED touch display, heart-rate, SpO2, 14-day battery. Crimson detail.", image: img("photo-1508685096489-7aacd43bd3b1") },
+  { handle: "mini-runner",       title: "Mini Runner",       category: "kids",     price: 4990,  currency: "INR", description: "Lightweight kids' sneaker with grippy outsole and soft foam collar. Sized 1Y–6Y.", image: img("photo-1503944583220-79d8926ad5e2"), badge: "NEW" },
+  { handle: "junior-tracksuit",  title: "Junior Tracksuit",  category: "kids",     price: 3490,  currency: "INR", description: "Soft brushed fleece set with elasticated cuffs. Designed for play and podiums.", image: img("photo-1519457431-44ccd64a579b") },
+  { handle: "rookie-tee",        title: "Rookie Tee",        category: "kids",     price: 1290,  currency: "INR", description: "Garment-washed cotton tee with embroidered ONE8 crest. Ages 4–12.", image: img("photo-1518831959646-742c3a14ebf7") },
 ];
 
 export const featuredHandles = ["shadow-runner-01", "crimson-court", "atelier-watch-08", "field-bomber", "pulse-buds", "monolith-cuff"];

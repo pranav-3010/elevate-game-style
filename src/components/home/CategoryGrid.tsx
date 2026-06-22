@@ -14,6 +14,7 @@ const layoutClasses = [
   "",                            // 6
   "lg:col-span-2",               // 7
   "",                            // 8
+  "lg:col-span-2",               // 9
 ];
 
 export function CategoryGrid() {

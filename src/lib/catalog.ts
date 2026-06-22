@@ -34,6 +34,7 @@ export const categories: Category[] = [
   { slug: "socks",      name: "Socks",          tagline: "Performance basics",   image: img("photo-1586350977771-b3b0abd50c82") },
   { slug: "gym",        name: "Gym Wear",       tagline: "Engineered for sweat", image: img("photo-1517836357463-d25dfeac3438") },
   { slug: "gadgets",    name: "Smart Gadgets",  tagline: "Quietly powerful",     image: img("photo-1505740420928-5e560c06d30e") },
+  { slug: "kids",       name: "Kids",           tagline: "Next-gen athletes",    image: img("photo-1503944583220-79d8926ad5e2") },
 ];
 
 export const products: Product[] = [

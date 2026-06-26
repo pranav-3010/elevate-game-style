@@ -23,6 +23,8 @@ export function Checkout() {
   const { cart, clearCart } = useCart();
   const [step, setStep] = useState<Step>("shipping");
   const [orderNumber, setOrderNumber] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState<"card" | "upi">("upi");
+  const [upiTxnId, setUpiTxnId] = useState("");
 
   // Shipping Form State
   const [shippingForm, setShippingForm] = useState({

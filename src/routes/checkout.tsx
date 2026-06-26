@@ -58,21 +58,26 @@ export function Checkout() {
 
   const handlePaymentSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // Simple Card validation mock
-    if (paymentForm.cardNumber.replace(/\s/g, "").length !== 16) {
-      toast.error("Please enter a valid 16-digit card number");
-      return;
-    }
-    if (paymentForm.cvv.length !== 3) {
-      toast.error("Please enter a valid 3-digit CVV");
-      return;
+
+    if (paymentMethod === "card") {
+      if (paymentForm.cardNumber.replace(/\s/g, "").length !== 16) {
+        toast.error("Please enter a valid 16-digit card number");
+        return;
+      }
+      if (paymentForm.cvv.length !== 3) {
+        toast.error("Please enter a valid 3-digit CVV");
+        return;
+      }
+    } else {
+      if (upiTxnId.trim().length < 6) {
+        toast.error("Enter the UPI transaction / UTR ID after payment");
+        return;
+      }
     }
 
-    // Generate random order number
     const num = Math.floor(100000 + Math.random() * 900000);
     setOrderNumber(`O8C-${num}`);
-    
+
     setStep("success");
     clearCart();
     toast.success("Order placed successfully! Check your email for confirmation.");

@@ -252,94 +252,143 @@ export function Checkout() {
                     </button>
                   </div>
 
-                  {/* Trust indicator */}
-                  <div className="flex items-center gap-3 bg-white/5 border border-white/5 rounded-lg p-4 text-xs text-muted-foreground">
-                    <ShieldCheck className="h-5 w-5 text-emerald-500" />
-                    <span>Your transaction is encrypted with 256-bit Secure Socket Layer (SSL) connection.</span>
+                  {/* Method toggle */}
+                  <div className="grid grid-cols-2 gap-2 p-1 rounded-full bg-white/5 border border-white/10">
+                    <button
+                      type="button"
+                      onClick={() => setPaymentMethod("upi")}
+                      className={`flex items-center justify-center gap-2 py-2.5 rounded-full text-xs font-bold uppercase tracking-widest transition ${paymentMethod === "upi" ? "bg-primary text-primary-foreground shadow" : "text-muted-foreground hover:text-foreground"}`}
+                    >
+                      <Smartphone className="h-3.5 w-3.5" /> UPI / QR
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setPaymentMethod("card")}
+                      className={`flex items-center justify-center gap-2 py-2.5 rounded-full text-xs font-bold uppercase tracking-widest transition ${paymentMethod === "card" ? "bg-primary text-primary-foreground shadow" : "text-muted-foreground hover:text-foreground"}`}
+                    >
+                      <CreditCard className="h-3.5 w-3.5" /> Card
+                    </button>
                   </div>
 
-                  <div className="space-y-4">
-                    <div>
-                      <label className="block text-xs uppercase tracking-widest text-muted-foreground mb-1.5">Name on Card</label>
-                      <input
-                        type="text"
-                        required
-                        value={paymentForm.cardName}
-                        onChange={(e) => setPaymentForm({ ...paymentForm, cardName: e.target.value })}
-                        placeholder="Johnathan Doe"
-                        className="w-full bg-white/5 border border-white/10 rounded px-3.5 py-2 text-sm text-foreground focus:outline-none focus:border-primary transition"
-                      />
-                    </div>
+                  {paymentMethod === "upi" ? (
+                    <div className="space-y-5">
+                      <div className="grid sm:grid-cols-[auto_1fr] gap-6 items-center">
+                        <div className="relative mx-auto">
+                          <div className="absolute -inset-3 bg-primary/20 blur-2xl rounded-3xl" />
+                          <div className="relative rounded-2xl overflow-hidden border border-white/10 bg-[#f5d39a] p-2 w-[220px]">
+                            <img src={upiQr.url} alt="UPI QR Code" className="w-full h-auto block" />
+                          </div>
+                        </div>
+                        <div className="space-y-3 text-sm">
+                          <p className="font-display text-lg uppercase tracking-wider text-foreground">Scan & Pay</p>
+                          <p className="text-muted-foreground text-xs leading-relaxed">
+                            Open any UPI app (GPay, PhonePe, Paytm, BHIM) and scan the QR to pay
+                            <span className="block mt-1 text-foreground font-semibold">₹{grandTotal.toLocaleString("en-IN")}</span>
+                          </p>
+                          <div className="flex items-center gap-2 text-[10px] uppercase tracking-widest text-muted-foreground">
+                            <span className="px-2 py-1 rounded bg-white/5 border border-white/10">Trio UPI</span>
+                            <span className="px-2 py-1 rounded bg-white/5 border border-white/10">Instant</span>
+                            <span className="px-2 py-1 rounded bg-white/5 border border-white/10">0% fee</span>
+                          </div>
+                        </div>
+                      </div>
 
-                    <div>
-                      <label className="block text-xs uppercase tracking-widest text-muted-foreground mb-1.5">Card Number</label>
-                      <div className="relative">
+                      <div>
+                        <label className="block text-xs uppercase tracking-widest text-muted-foreground mb-1.5">UPI Transaction / UTR ID</label>
                         <input
                           type="text"
                           required
-                          value={paymentForm.cardNumber}
-                          onChange={(e) => {
-                            // Formatting input with spaces every 4 characters
-                            const val = e.target.value.replace(/\s+/g, "").replace(/[^0-9]/gi, "");
-                            const matches = val.match(/\d{4,16}/g);
-                            const match = (matches && matches[0]) || "";
-                            const parts = [];
-                            for (let i = 0, len = match.length; i < len; i += 4) {
-                              parts.push(match.substring(i, i + 4));
-                            }
-                            if (parts.length > 0) {
-                              setPaymentForm({ ...paymentForm, cardNumber: parts.join(" ") });
-                            } else {
-                              setPaymentForm({ ...paymentForm, cardNumber: val });
-                            }
-                          }}
-                          maxLength={19}
-                          placeholder="4111 2222 3333 4444"
-                          className="w-full bg-white/5 border border-white/10 rounded px-3.5 py-2 pl-11 text-sm text-foreground focus:outline-none focus:border-primary transition"
+                          value={upiTxnId}
+                          onChange={(e) => setUpiTxnId(e.target.value)}
+                          placeholder="e.g. 412345678901"
+                          className="w-full bg-white/5 border border-white/10 rounded px-3.5 py-2 text-sm text-foreground focus:outline-none focus:border-primary transition tracking-wider"
                         />
-                        <CreditCard className="absolute left-3.5 top-2.5 h-4.5 w-4.5 text-muted-foreground" />
+                        <p className="text-[10px] text-muted-foreground mt-1.5">After paying, copy the reference / UTR from your UPI app and paste it here to confirm the order.</p>
                       </div>
                     </div>
-
-                    <div className="grid grid-cols-2 gap-4">
+                  ) : (
+                    <div className="space-y-4">
                       <div>
-                        <label className="block text-xs uppercase tracking-widest text-muted-foreground mb-1.5">Expiry Date</label>
+                        <label className="block text-xs uppercase tracking-widest text-muted-foreground mb-1.5">Name on Card</label>
                         <input
                           type="text"
                           required
-                          value={paymentForm.expDate}
-                          onChange={(e) => {
-                            let val = e.target.value.replace(/\D/g, "");
-                            if (val.length > 2) {
-                              val = `${val.substring(0, 2)}/${val.substring(2, 4)}`;
-                            }
-                            setPaymentForm({ ...paymentForm, expDate: val });
-                          }}
-                          maxLength={5}
-                          placeholder="MM/YY"
-                          className="w-full bg-white/5 border border-white/10 rounded px-3.5 py-2 text-sm text-foreground focus:outline-none focus:border-primary transition text-center"
+                          value={paymentForm.cardName}
+                          onChange={(e) => setPaymentForm({ ...paymentForm, cardName: e.target.value })}
+                          placeholder="Johnathan Doe"
+                          className="w-full bg-white/5 border border-white/10 rounded px-3.5 py-2 text-sm text-foreground focus:outline-none focus:border-primary transition"
                         />
                       </div>
+
                       <div>
-                        <label className="block text-xs uppercase tracking-widest text-muted-foreground mb-1.5">CVV</label>
-                        <input
-                          type="password"
-                          required
-                          value={paymentForm.cvv}
-                          onChange={(e) => setPaymentForm({ ...paymentForm, cvv: e.target.value.replace(/\D/g, "") })}
-                          maxLength={3}
-                          placeholder="•••"
-                          className="w-full bg-white/5 border border-white/10 rounded px-3.5 py-2 text-sm text-foreground focus:outline-none focus:border-primary transition text-center"
-                        />
+                        <label className="block text-xs uppercase tracking-widest text-muted-foreground mb-1.5">Card Number</label>
+                        <div className="relative">
+                          <input
+                            type="text"
+                            required
+                            value={paymentForm.cardNumber}
+                            onChange={(e) => {
+                              const val = e.target.value.replace(/\s+/g, "").replace(/[^0-9]/gi, "");
+                              const matches = val.match(/\d{4,16}/g);
+                              const match = (matches && matches[0]) || "";
+                              const parts = [];
+                              for (let i = 0, len = match.length; i < len; i += 4) {
+                                parts.push(match.substring(i, i + 4));
+                              }
+                              if (parts.length > 0) {
+                                setPaymentForm({ ...paymentForm, cardNumber: parts.join(" ") });
+                              } else {
+                                setPaymentForm({ ...paymentForm, cardNumber: val });
+                              }
+                            }}
+                            maxLength={19}
+                            placeholder="4111 2222 3333 4444"
+                            className="w-full bg-white/5 border border-white/10 rounded px-3.5 py-2 pl-11 text-sm text-foreground focus:outline-none focus:border-primary transition"
+                          />
+                          <CreditCard className="absolute left-3.5 top-2.5 h-4.5 w-4.5 text-muted-foreground" />
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-xs uppercase tracking-widest text-muted-foreground mb-1.5">Expiry Date</label>
+                          <input
+                            type="text"
+                            required
+                            value={paymentForm.expDate}
+                            onChange={(e) => {
+                              let val = e.target.value.replace(/\D/g, "");
+                              if (val.length > 2) {
+                                val = `${val.substring(0, 2)}/${val.substring(2, 4)}`;
+                              }
+                              setPaymentForm({ ...paymentForm, expDate: val });
+                            }}
+                            maxLength={5}
+                            placeholder="MM/YY"
+                            className="w-full bg-white/5 border border-white/10 rounded px-3.5 py-2 text-sm text-foreground focus:outline-none focus:border-primary transition text-center"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-xs uppercase tracking-widest text-muted-foreground mb-1.5">CVV</label>
+                          <input
+                            type="password"
+                            required
+                            value={paymentForm.cvv}
+                            onChange={(e) => setPaymentForm({ ...paymentForm, cvv: e.target.value.replace(/\D/g, "") })}
+                            maxLength={3}
+                            placeholder="•••"
+                            className="w-full bg-white/5 border border-white/10 rounded px-3.5 py-2 text-sm text-foreground focus:outline-none focus:border-primary transition text-center"
+                          />
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  )}
 
                   <button
                     type="submit"
                     className="w-full rounded-full bg-primary py-3.5 text-xs font-bold uppercase tracking-widest text-primary-foreground hover:bg-primary/95 transition shadow-lg cursor-pointer"
                   >
-                    Place Order — ₹{grandTotal.toLocaleString("en-IN")}
+                    {paymentMethod === "upi" ? "Confirm Order" : "Place Order"} — ₹{grandTotal.toLocaleString("en-IN")}
                   </button>
                 </form>
               </motion.div>

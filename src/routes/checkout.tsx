@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Check, ShoppingBag, CreditCard, ShieldCheck, ArrowLeft, Heart, Sparkles, CheckCircle2 } from "lucide-react";
+import { Check, ShoppingBag, CreditCard, ShieldCheck, ArrowLeft, Heart, Sparkles, CheckCircle2, Smartphone, Copy } from "lucide-react";
 import { useCart } from "@/hooks/useCart";
 import { formatPrice } from "@/lib/catalog";
 import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
+import upiQr from "@/assets/upi-qr.jpeg.asset.json";
 
 export const Route = createFileRoute("/checkout")({
   head: () => ({

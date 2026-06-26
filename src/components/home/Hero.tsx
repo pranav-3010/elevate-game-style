@@ -100,7 +100,8 @@ export function Hero() {
             </MagneticButton>
             <MagneticButton>
               <Link
-                to="/category/sneakers"
+                to="/category/$slug"
+                params={{ slug: "sneakers" }}
                 className="group inline-flex items-center gap-3 rounded-full border border-white/20 bg-white/5 px-8 py-4 text-xs font-bold uppercase tracking-[0.22em] text-foreground backdrop-blur-md transition hover:border-foreground hover:bg-foreground hover:text-background"
               >
                 <Play className="h-3.5 w-3.5" /> Explore Sneakers

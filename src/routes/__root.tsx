@@ -7,7 +7,7 @@ import {
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
-import { useEffect, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { ClerkProvider } from "@clerk/tanstack-react-start";
 import { useProfileSync } from "../hooks/useProfileSync";
 
@@ -146,20 +146,38 @@ function ProfileSyncHandler() {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const [syncStatus, setSyncStatus] = useState<string>("Initializing...");
+
   const isSupabaseConfigured = 
     !!import.meta.env.VITE_SUPABASE_URL && 
     !import.meta.env.VITE_SUPABASE_URL.includes("your-project");
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (typeof window !== "undefined") {
+        const val = sessionStorage.getItem("supabase_sync_status") || "Waiting for Clerk...";
+        setSyncStatus(val);
+      }
+    }, 500);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <ClerkProvider>
       <QueryClientProvider client={queryClient}>
         <ProfileSyncHandler />
-        <div className="relative flex min-h-screen flex-col bg-background">
-          {!isSupabaseConfigured && (
-            <div className="fixed top-0 left-0 right-0 z-[100] bg-red-600/95 text-white text-center text-[9px] uppercase font-bold tracking-[0.2em] py-2.5 border-b border-red-500 shadow-[0_4px_20px_rgba(239,68,68,0.3)]">
-              ⚠️ Diagnostic Warning: VITE_SUPABASE_URL is missing. Check your Vercel keys!
-            </div>
-          )}
+        <div className="relative flex min-h-screen flex-col bg-background pt-10">
+          <div className="fixed top-0 left-0 right-0 z-[100] bg-zinc-950/95 text-white text-center text-[10px] py-2 border-b border-white/10 shadow-lg flex items-center justify-center gap-4 font-mono">
+            <span className="flex items-center gap-2">
+              <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+              DB Sync Status: <strong className="text-amber-400">{syncStatus}</strong>
+            </span>
+            {!isSupabaseConfigured && (
+              <span className="text-red-500 font-bold bg-red-950/50 px-2 py-0.5 rounded border border-red-800">
+                ⚠️ VITE_SUPABASE_URL MISSING!
+              </span>
+            )}
+          </div>
           <div className="noise-layer" aria-hidden />
           <CursorGlow />
           <Header />

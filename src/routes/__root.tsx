@@ -9,6 +9,7 @@ import {
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
 import { ClerkProvider } from "@clerk/tanstack-react-start";
+import { useProfileSync } from "../hooks/useProfileSync";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
@@ -138,12 +139,18 @@ function RootShell({ children }: { children: ReactNode }) {
   );
 }
 
+function ProfileSyncHandler() {
+  useProfileSync();
+  return null;
+}
+
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
 
   return (
     <ClerkProvider>
       <QueryClientProvider client={queryClient}>
+        <ProfileSyncHandler />
         <div className="relative flex min-h-screen flex-col bg-background">
           <div className="noise-layer" aria-hidden />
           <CursorGlow />

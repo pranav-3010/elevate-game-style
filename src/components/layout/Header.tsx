@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useCart } from "@/hooks/useCart";
 import { CartDrawer } from "./CartDrawer";
 import { products } from "@/lib/catalog";
+import { useAuth, SignInButton, UserButton } from "@clerk/tanstack-react-start";
 
 const nav = [
   { to: "/shop", label: "Shop" },
@@ -16,6 +17,7 @@ const nav = [
 ];
 
 export function Header() {
+  const { isSignedIn } = useAuth();
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -85,9 +87,17 @@ export function Header() {
             >
               <Search className="h-5 w-5" />
             </button>
-            <button aria-label="Account" className="hidden text-foreground/70 transition hover:text-primary sm:block cursor-pointer">
-              <User className="h-5 w-5" />
-            </button>
+            {!isSignedIn ? (
+              <SignInButton mode="modal">
+                <button aria-label="Account" className="hidden text-foreground/70 transition hover:text-primary sm:block cursor-pointer bg-transparent border-none p-0">
+                  <User className="h-5 w-5" />
+                </button>
+              </SignInButton>
+            ) : (
+              <div className="hidden sm:flex items-center">
+                <UserButton />
+              </div>
+            )}
             <button
               onClick={() => toggleCart(true)}
               aria-label="Bag"

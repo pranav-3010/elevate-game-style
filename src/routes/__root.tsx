@@ -8,6 +8,7 @@ import {
   Scripts,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
+import { ClerkProvider } from "@clerk/tanstack-react-start";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
@@ -141,16 +142,18 @@ function RootComponent() {
   const { queryClient } = Route.useRouteContext();
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <div className="relative flex min-h-screen flex-col bg-background">
-        <div className="noise-layer" aria-hidden />
-        <CursorGlow />
-        <Header />
-        <main className="relative z-[3] flex-1">
-          <Outlet />
-        </main>
-        <Footer />
-      </div>
-    </QueryClientProvider>
+    <ClerkProvider>
+      <QueryClientProvider client={queryClient}>
+        <div className="relative flex min-h-screen flex-col bg-background">
+          <div className="noise-layer" aria-hidden />
+          <CursorGlow />
+          <Header />
+          <main className="relative z-[3] flex-1">
+            <Outlet />
+          </main>
+          <Footer />
+        </div>
+      </QueryClientProvider>
+    </ClerkProvider>
   );
 }

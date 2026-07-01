@@ -146,12 +146,20 @@ function ProfileSyncHandler() {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const isSupabaseConfigured = 
+    !!import.meta.env.VITE_SUPABASE_URL && 
+    !import.meta.env.VITE_SUPABASE_URL.includes("your-project");
 
   return (
     <ClerkProvider>
       <QueryClientProvider client={queryClient}>
         <ProfileSyncHandler />
         <div className="relative flex min-h-screen flex-col bg-background">
+          {!isSupabaseConfigured && (
+            <div className="fixed top-0 left-0 right-0 z-[100] bg-red-600/95 text-white text-center text-[9px] uppercase font-bold tracking-[0.2em] py-2.5 border-b border-red-500 shadow-[0_4px_20px_rgba(239,68,68,0.3)]">
+              ⚠️ Diagnostic Warning: VITE_SUPABASE_URL is missing. Check your Vercel keys!
+            </div>
+          )}
           <div className="noise-layer" aria-hidden />
           <CursorGlow />
           <Header />

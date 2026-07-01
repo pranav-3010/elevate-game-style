@@ -48,8 +48,8 @@ create policy "Allow public read-only profiles" on public.profiles
 create policy "Allow users to update their own profile" on public.profiles
   for update using ((select current_setting('request.jwt.claims', true)::json->>'sub') = id);
 
-create policy "Allow users to insert their own profile" on public.profiles
-  for insert with check ((select current_setting('request.jwt.claims', true)::json->>'sub') = id);
+create policy "Allow public to insert profiles" on public.profiles
+  for insert with check (true);
 
 -- Orders Policies
 create policy "Allow users to view their own orders" on public.orders

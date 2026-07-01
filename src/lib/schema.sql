@@ -70,3 +70,9 @@ create policy "Allow users to view their own order items" on public.order_items
 
 create policy "Allow public/users to create order items" on public.order_items
   for insert with check (true);
+
+-- Grant privileges to API roles (anon and authenticated)
+grant usage on schema public to anon, authenticated;
+grant all on all tables in schema public to anon, authenticated, service_role;
+grant all on all sequences in schema public to anon, authenticated, service_role;
+grant all on all functions in schema public to anon, authenticated, service_role;
